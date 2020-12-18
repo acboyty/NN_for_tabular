@@ -2,3 +2,4 @@ datasets*
 catboost_info
 .*
 baseline/eda.ipynb
+baseline/__pycache__
