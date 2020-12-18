@@ -1,2 +1,4 @@
-datasets
+datasets*
 catboost_info
+.*
+baseline/eda.ipynb
