@@ -8,21 +8,28 @@ from sklearn.metrics import log_loss
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.model_selection import train_test_split
 from io import StringIO
-import re 
+import re
 import torch
-
+import random
 
 if __name__ == '__main__':
-    """hyperparams"""
-    SEED = 2020
-    # Adult, Amazon, Click prediction, KDD appetency, KDD churn, KDD internet, KDD upselling, KDD 98, Kick prediction
-    DATASET = 'Click prediction'  
+    # hyperparams
+    SEED = 2021
+    # Adult, Amazon, Click prediction, KDD appetency, KDD churn, KDD upselling, HIGGS, KDD internet, Kick prediction
+    # San Francisco,
+    # Rossmann,
+    DATASET = 'Kick prediction'
     DATASET_PATH = "/home/v-tyan/NN_for_tabular/datasets/"
-    MODEL = 'lgb'  # xgb, lgb, cat, mlp, deepfm, xdeepfm, tabnet
+    MODEL = 'tabnet'  # cat, lgb, xgb, mlp, deepfm, tabnet
+    SAMPLE = False
+    SAMPLE_NUM = 50000
+    SPLIT_METHOD = '6-2-2'  # TODO: add more splitting methods
+    USE_CATEGORY = False  # TODO: other methods besides xgb
 
     # reproduce
     np.random.seed(SEED)
     torch.manual_seed(SEED)
+    random.seed(SEED)
 
     # choose model
     if MODEL == 'cat':
@@ -40,13 +47,11 @@ if __name__ == '__main__':
     elif MODEL == 'deepfm':
         from models import DeepFMModel
         Model = DeepFMModel
-    elif MODEL == 'xdeepfm':
-        from models import XDeepFMModel
-        Model = XDeepFMModel
     elif MODEL == 'tabnet':
         from models import TabNetModel
         Model = TabNetModel
-    
+
     # run
-    model = Model(DATASET, DATASET_PATH)
-    model.run()    
+    model = Model(DATASET, DATASET_PATH, sample=SAMPLE, sample_num=SAMPLE_NUM,
+                  split_method=SPLIT_METHOD, use_category=USE_CATEGORY)
+    model.run()
