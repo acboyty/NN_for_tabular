@@ -13,6 +13,8 @@ from io import StringIO
 import re
 from utils import *
 from time import time
+from deepctr_torch.inputs import SparseFeat, DenseFeat, get_feature_names
+from deepctr_torch.models import DeepFM
 
 
 # TODO: add parameter tuning by hyperopt
@@ -141,6 +143,22 @@ class DeepFMModel(BaseModel):
     def __init__(self, dataset, dataset_path, sample=False, sample_num=None, split_method='6-2-2', use_category=True):
         BaseModel.__init__(self, dataset, dataset_path, sample, sample_num, split_method, use_category)
 
+    def preprocessing(self, train_X, val_X, test_X, cat_cols):
+        train_X, val_X, test_X = remove_unseen_category(train_X, val_X, test_X, cat_cols)
+        train_X, val_X, test_X = label_encoding(train_X, val_X, test_X, cat_cols)
+        train_X, val_X, test_X = scaling(train_X, val_X, test_X, cat_cols)
+        # remove np.nan
+        train_X, val_X, test_X = train_X.astype(float), val_X.astype(float), test_X.astype(float)
+        train_X = np.where(np.isnan(train_X), 0, train_X)
+        val_X = np.where(np.isnan(val_X), 0, val_X)
+        test_X = np.where(np.isnan(test_X), 0, test_X)
+        return train_X, val_X, test_X
+     
+    def fit(self, train_X, train_Y, val_X, val_Y, cat_cols):
+        device = 'cuda:0'
+        self.model = DeepFM(list(range(train_X.shape[1])), list(range(train_X.shape[1])), task='binary', device=device)
+        self.model.compile("adam", "binary_crossentropy", metrics=['binary_crossentropy'], )
+        self.model.fit(train_X, train_Y, batch_size=256, epochs=10, verbose=2, validation_split=0.25)
 
 class TabNetModel(BaseModel):
     def __init__(self, dataset, dataset_path, sample=False, sample_num=None, split_method='6-2-2', use_category=True):

@@ -7,6 +7,7 @@ from io import StringIO
 import re
 import random
 from tqdm import tqdm
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 
 # TODO: use dict
 
@@ -73,6 +74,15 @@ def one_hot_encoding(train_X, val_X, test_X, cat_cols):
     train_X = np.concatenate((np.delete(train_X, cat_cols, axis=1), train_X_cat.A), axis=1)
     val_X = np.concatenate((np.delete(val_X, cat_cols, axis=1), val_X_cat.A), axis=1)
     test_X = np.concatenate((np.delete(test_X, cat_cols, axis=1), test_X_cat.A), axis=1)
+    return train_X, val_X, test_X
+
+
+def scaling(train_X, val_X, test_X, cat_cols):
+    mms = MinMaxScaler(feature_range=(0, 1))
+    num_cols = [idx for idx in range(train_X.shape[1]) if idx not in cat_cols]
+    train_X[:, num_cols] = mms.fit_transform(train_X[:, num_cols])
+    val_X[:, num_cols] = mms.transform(val_X[:, num_cols])
+    test_X[:, num_cols] = mms.transform(test_X[:, num_cols])
     return train_X, val_X, test_X
 
 
