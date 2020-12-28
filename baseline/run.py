@@ -18,13 +18,13 @@ if __name__ == '__main__':
     # Adult, Amazon, Click prediction, KDD appetency, KDD churn, KDD upselling, HIGGS, KDD internet, Kick prediction
     # San Francisco,
     # Rossmann,
-    DATASET = 'Adult'
+    DATASET = 'Amazon'
     DATASET_PATH = "/home/v-tyan/NN_for_tabular/datasets/"
     MODEL = 'deepfm'  # cat, lgb, xgb, mlp, deepfm, tabnet
     SAMPLE = False
-    SAMPLE_NUM = 50000
+    SAMPLE_NUM = 110000
     SPLIT_METHOD = '6-2-2'  # TODO: add more splitting methods
-    USE_CATEGORY = False  # TODO: other methods besides xgb
+    USE_CATEGORY = True  # TODO: other methods besides xgb
 
     # reproduce
     np.random.seed(SEED)
@@ -33,22 +33,22 @@ if __name__ == '__main__':
 
     # choose model
     if MODEL == 'cat':
-        from models import CATModel
+        from cat import CATModel
         Model = CATModel
     elif MODEL == 'lgb':
-        from models import LGBModel
+        from lgb import LGBModel
         Model = LGBModel
     elif MODEL == 'xgb':
-        from models import XGBModel
+        from xgb import XGBModel
         Model = XGBModel
-    elif MODEL == 'mlp':
-        from models import MLPModel
-        Model = MLPModel
     elif MODEL == 'deepfm':
-        from models import DeepFMModel
+        from deepfm import DeepFMModel
         Model = DeepFMModel
+    elif MODEL == 'xdeepfm':
+        from xdeepfm import XDeepFMModel
+        Model = XDeepFMModel
     elif MODEL == 'tabnet':
-        from models import TabNetModel
+        from tabnet import TabNetModel
         Model = TabNetModel
 
     # run

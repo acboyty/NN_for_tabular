@@ -78,11 +78,12 @@ def one_hot_encoding(train_X, val_X, test_X, cat_cols):
 
 
 def scaling(train_X, val_X, test_X, cat_cols):
-    mms = MinMaxScaler(feature_range=(0, 1))
-    num_cols = [idx for idx in range(train_X.shape[1]) if idx not in cat_cols]
-    train_X[:, num_cols] = mms.fit_transform(train_X[:, num_cols])
-    val_X[:, num_cols] = mms.transform(val_X[:, num_cols])
-    test_X[:, num_cols] = mms.transform(test_X[:, num_cols])
+    if train_X.shape[1] < len(cat_cols):
+        mms = MinMaxScaler(feature_range=(0, 1))
+        num_cols = [idx for idx in range(train_X.shape[1]) if idx not in cat_cols]
+        train_X[:, num_cols] = mms.fit_transform(train_X[:, num_cols])
+        val_X[:, num_cols] = mms.transform(val_X[:, num_cols])
+        test_X[:, num_cols] = mms.transform(test_X[:, num_cols])
     return train_X, val_X, test_X
 
 
