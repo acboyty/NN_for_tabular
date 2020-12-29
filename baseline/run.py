@@ -18,9 +18,9 @@ if __name__ == '__main__':
     # Adult, Amazon, Click prediction, KDD appetency, KDD churn, KDD upselling, HIGGS, KDD internet, Kick prediction
     # San Francisco,
     # Rossmann,
-    DATASET = 'Amazon'
+    DATASET = 'Click prediction'
     DATASET_PATH = "/home/v-tyan/NN_for_tabular/datasets/"
-    MODEL = 'deepfm'  # cat, lgb, xgb, mlp, deepfm, tabnet
+    MODEL = 'tabnet'  # cat, lgb, xgb, mlp, deepfm, tabnet
     SAMPLE = False
     SAMPLE_NUM = 110000
     SPLIT_METHOD = '6-2-2'  # TODO: add more splitting methods
