@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # Rossmann,
     DATASET = 'Click prediction'
     DATASET_PATH = "/home/v-tyan/NN_for_tabular/datasets/"
-    MODEL = 'tabnet'  # cat, lgb, xgb, mlp, deepfm, tabnet
+    MODEL = 'lgb'  # cat, lgb, xgb, mlp, deepfm, tabnet
     SAMPLE = False
     SAMPLE_NUM = 110000
     SPLIT_METHOD = '6-2-2'  # TODO: add more splitting methods
